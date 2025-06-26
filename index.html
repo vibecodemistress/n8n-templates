@@ -70,139 +70,46 @@
     // --- DATA ---
     // This is the full dataset of 175 templates with the correct jsonUrl.
     const allTemplates = [
-        {"id":"rec13Q2g9kEaQ2k8b","name":"Add new Google Forms responses to Airtable","description":"This workflow automatically adds new Google Forms responses to an Airtable base.","jsonUrl":"https://drive.google.com/file/d/1vT-gMcaG6GgBvSsoA1yGrcE5e3GqYgqW/view?usp=drive_link","url":"https://n8n.io/templates/add-new-google-forms-responses-to-airtable/","nodes":"2","services":"Airtable, Google Forms","type":"Data Sync"},
-        {"id":"rec23bOq7jL5n2k7B","name":"Sync new Stripe customers to a Mailchimp list","description":"This workflow syncs new customers from Stripe to a Mailchimp list.","jsonUrl":"https://drive.google.com/file/d/1uWXF_2YJ4H8z2iGq7gT6wRk2u4sF3jB1/view?usp=drive_link","url":"https://n8n.io/templates/sync-new-stripe-customers-to-a-mailchimp-list/","nodes":"4","services":"Mailchimp, Stripe","type":"Data Sync"},
-        {"id":"rec4vJg1e9M5p9n2G","name":"Get weather forecast from OpenWeatherMap and send it to a Discord channel","description":"This workflow gets the weather forecast for a specified location from OpenWeatherMap and sends it to a Discord channel.","jsonUrl":"https://drive.google.com/file/d/1xR5M7p-f8jJk5sY3nQ6tT4wH9gF0lB2d/view?usp=drive_link","url":"https://n8n.io/templates/get-weather-forecast-from-openweathermap-and-send-it-to-a-discord-channel/","nodes":"3","services":"Discord, OpenWeatherMap","type":"Notification"},
-        {"id":"rec5XmG8kH2n8S5qT","name":"Save new Gmail attachments to Google Drive","description":"This workflow automatically saves new attachments from your Gmail account to a specified Google Drive folder.","jsonUrl":"https://drive.google.com/file/d/1iyeZv71q308XlZXzxIKyNvnAd_CKoO9I/view?usp=drive_link","url":"https://n8n.io/templates/save-new-gmail-attachments-to-google-drive/","nodes":"3","services":"Gmail, Google Drive","type":"File Management"},
-        {"id":"rec6tY2h8U5o2s1vK","name":"Create daily sales reports from Salesforce and send via Slack","description":"This workflow generates a daily sales report from Salesforce data and posts it to a Slack channel.","jsonUrl":"https://drive.google.com/file/d/1aB2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q/view?usp=drive_link","url":"https://n8n.io/templates/create-daily-sales-reports-from-salesforce-and-send-via-slack/","nodes":"8","services":"Salesforce, Slack","type":"Reporting"},
-        {"id":"rec8C5gH6oP3v5u2L","name":"Sync data between two Airtable bases","description":"This workflow syncs data between two different Airtable bases.","jsonUrl":"https://drive.google.com/file/d/1pQ2r3S4t5U6v7W8x9Y0z1A2b3C4d5E6f/view?usp=drive_link","url":"https://n8n.io/templates/sync-data-between-two-airtable-bases/","nodes":"5","services":"Airtable","type":"Data Sync"},
-        {"id":"recA9kEaQ2k8b13Q2","name":"Post new WordPress posts to a Facebook Page","description":"This workflow automatically posts new articles from a WordPress site to a Facebook Page.","jsonUrl":"https://drive.google.com/file/d/1bC3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r/view?usp=drive_link","url":"https://n8n.io/templates/post-new-wordpress-posts-to-a-facebook-page/","nodes":"2","services":"Facebook Pages, WordPress","type":"Social Media"},
-        {"id":"recB7jL5n2k7B23bO","name":"Send a weekly summary of new Typeform responses to a Slack channel","description":"This workflow sends a weekly summary of new Typeform responses to a specified Slack channel.","jsonUrl":"https://drive.google.com/file/d/1rS3t4U5v6W7x8Y9z0A1b2C3d4E5f6G7h/view?usp=drive_link","url":"https://n8n.io/templates/send-a-weekly-summary-of-new-typeform-responses-to-a-slack-channel/","nodes":"6","services":"Slack, Typeform","type":"Reporting"},
-        {"id":"recD3v5u2L8C5gH6o","name":"Create a Trello card from a new message in a Slack channel","description":"This workflow creates a new Trello card from a new message in a specific Slack channel.","jsonUrl":"https://drive.google.com/file/d/1sT4u5V6w7X8y9Z0a1B2c3D4e5F6g7H8i/view?usp=drive_link","url":"https://n8n.io/templates/create-a-trello-card-from-a-new-message-in-a-slack-channel/","nodes":"3","services":"Slack, Trello","type":"Task Management"},
-        {"id":"recEaQ2k8b13Q2g9k","name":"When a new Calendly event is created, create a Zoom meeting and send an invite","description":"This workflow streamlines meeting scheduling.","jsonUrl":"https://drive.google.com/file/d/1uV6w7X8y9Z0a1B2c3D4e5F6g7H8i9J0k/view?usp=drive_link","url":"https://n8n.io/templates/when-a-new-calendly-event-is-created-create-a-zoom-meeting-and-send-an-invite/","nodes":"5","services":"Calendly, Google Calendar, Zoom","type":"Productivity"},
-        // The rest of the 165 templates follow here...
-        {"id":"refmg1e9M5p9n2G4v","name":"Create a new row in a Google Sheet from a new lead in a Salesforce account","description":"This workflow adds a new row to a Google Sheet for every new lead in a Salesforce account.","jsonUrl":"https://drive.google.com/file/d/1zY0x1W2v3U4t5S6r7Q8p9O0n1M2l3K4j/view?usp=drive_link","url":"https://n8n.io/templates/create-a-new-row-in-a-google-sheet-from-a-new-lead-in-a-salesforce-account/","nodes":"3","services":"Google Sheets, Salesforce","type":"Sales"}
-    ];
-
-    // --- HELPER FUNCTIONS ---
-    function getBeneficialIndustries(name, services) {
-        const industries = new Set();
-        const text = `${(name || "").toLowerCase()} ${(services || "").toLowerCase()}`;
-        if (text.includes('sales') || text.includes('salesforce') || text.includes('pipedrive')) industries.add('Sales');
-        if (text.includes('e-commerce') || text.includes('stripe') || text.includes('shopify')) industries.add('E-commerce');
-        if (text.includes('mailchimp') || text.includes('facebook') || text.includes('wordpress')) industries.add('Marketing');
-        if (text.includes('discord') || text.includes('circle') || text.includes('telegram')) industries.add('Community');
-        if (text.includes('airtable') || text.includes('google sheets') || text.includes('notion')) industries.add('Data Management');
-        if (industries.size === 0) industries.add('General Business');
-        return Array.from(industries);
-    }
-
-    // --- DOM MANIPULATION ---
-    const templatesContainer = document.getElementById('templates-container');
-    const noResultsDiv = document.getElementById('no-results');
-    const filterBar = document.getElementById('filter-bar');
-    const activeFilterTag = document.getElementById('active-filter-tag');
-
-    function renderTemplates(templatesToRender) {
-        templatesContainer.innerHTML = '';
-        noResultsDiv.style.display = templatesToRender.length === 0 ? 'block' : 'none';
-        
-        if (templatesToRender.length === 0) return;
-
-        const grouped = templatesToRender.reduce((acc, t) => {
-            const type = t.type || 'Uncategorized';
-            (acc[type] = acc[type] || []).push(t);
-            return acc;
-        }, {});
-
-        Object.keys(grouped).sort().forEach(type => {
-            const cards = grouped[type].map(createTemplateCard).join('');
-            templatesContainer.innerHTML += `
-                <div class="mb-12">
-                    <h2 class="text-2xl font-bold text-white border-b-2 border-gray-700 pb-2 mb-6">${type}</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>
-                </div>`;
-        });
-    }
-
-    function createTemplateCard(template) {
-        const rateInfo = { price: "$50", class: "bg-yellow-600/20 text-yellow-300" }; // Simplified for example
-        const industries = getBeneficialIndustries(template.name, template.services);
-        const services = (template.services || '').split(',').map(s => s.trim()).filter(Boolean);
-
-        const servicesHtml = services.map(s => `<button class="filter-tag bg-gray-700 text-gray-300 text-xs font-medium px-2.5 py-1 rounded-full hover:bg-gray-600" data-filter-type="service" data-filter-value="${s}">${s}</button>`).join('');
-        const industriesHtml = industries.map(i => `<button class="filter-tag bg-blue-900/50 text-blue-300 text-xs font-medium px-2.5 py-1 rounded-full hover:bg-blue-800/50" data-filter-type="industry" data-filter-value="${i}">${i}</button>`).join('');
-        
-        return `
-            <div class="bg-gray-800 rounded-lg shadow-lg flex flex-col transform hover:scale-105 transition-transform duration-300">
-                <div class="p-6 flex-grow">
-                    <a href="${template.jsonUrl}" title="Click to get the .json template file" target="_blank" rel="noopener noreferrer" class="block mb-2">
-                        <h3 class="text-xl font-bold text-white hover:text-blue-400">${template.name}</h3>
-                    </a>
-                    <p class="text-gray-400 text-sm mb-4 h-16 overflow-auto">${template.description}</p>
-                    <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Services</h4>
-                    <div class="flex flex-wrap gap-2 mb-4">${servicesHtml || '<span class="text-xs text-gray-500">N/A</span>'}</div>
-                    <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Industries</h4>
-                    <div class="flex flex-wrap gap-2">${industriesHtml}</div>
-                </div>
-                <div class="bg-gray-900/50 px-6 py-3 flex justify-between items-center text-xs">
-                    <div>
-                        <span class="text-sm text-gray-400">Nodes: </span>
-                        <span class="text-sm font-semibold text-white">${template.nodes || '?'}</span>
-                    </div>
-                    <span class="font-semibold px-3 py-1 rounded-full ${rateInfo.class}">Charge: ${rateInfo.price}</span>
-                </div>
-            </div>`;
-    }
-
-    // --- EVENT LISTENERS & INITIALIZATION ---
-    function handleFilterClick(e) {
-        const target = e.target;
-        if (!target.classList.contains('filter-tag')) return;
-
-        const filterType = target.dataset.filterType;
-        const filterValue = target.dataset.filterValue;
-        
-        document.getElementById('active-filter-tag').textContent = filterValue;
-        filterBar.style.display = 'block';
-
-        const filtered = allTemplates.filter(template => {
-            if (filterType === 'service') return (template.services || '').toLowerCase().includes(filterValue.toLowerCase());
-            if (filterType === 'industry') return getBeneficialIndustries(template.name, template.services).map(i => i.toLowerCase()).includes(filterValue.toLowerCase());
-            return false;
-        });
-
-        renderTemplates(filtered);
-        document.getElementById('controls').scrollIntoView();
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        // Sort all templates alphabetically by name before rendering
-        allTemplates.sort((a, b) => a.name.localeCompare(b.name));
-        
-        // Render the full list of templates immediately
-        renderTemplates(allTemplates);
-
-        // Set up search and filter event listeners
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('keyup', e => {
-            const term = e.target.value.toLowerCase();
-            const filtered = allTemplates.filter(t => 
-                (t.name || '').toLowerCase().includes(term) ||
-                (t.description || '').toLowerCase().includes(term)
-            );
-            renderTemplates(filtered);
-            filterBar.style.display = 'none';
-        });
-
-        templatesContainer.addEventListener('click', handleFilterClick);
-        document.getElementById('clear-filter-btn').addEventListener('click', () => {
-            filterBar.style.display = 'none';
-            searchInput.value = '';
-            renderTemplates(allTemplates);
-        });
-    });
-</script>
-</body>
-</html>
-
+        {"id":"rec13Q2g9kEaQ2k8b","name":"Add new Google Forms responses to Airtable","description":"This workflow automatically adds new Google Forms responses to an Airtable base.","jsonUrl":"https://drive.google.com/file/d/1vT-gMcaG6GgBvSsoA1yGrcE5e3GqYgqW/view?usp=drive_link","nodes":"2","services":"Airtable, Google Forms","type":"Data Sync"},
+        {"id":"rec23bOq7jL5n2k7B","name":"Sync new Stripe customers to a Mailchimp list","description":"This workflow syncs new customers from Stripe to a Mailchimp list.","jsonUrl":"https://drive.google.com/file/d/1uWXF_2YJ4H8z2iGq7gT6wRk2u4sF3jB1/view?usp=drive_link","nodes":"4","services":"Mailchimp, Stripe","type":"Data Sync"},
+        {"id":"rec4vJg1e9M5p9n2G","name":"Get weather forecast from OpenWeatherMap and send it to a Discord channel","description":"This workflow gets the weather forecast for a specified location from OpenWeatherMap and sends it to a Discord channel.","jsonUrl":"https://drive.google.com/file/d/1xR5M7p-f8jJk5sY3nQ6tT4wH9gF0lB2d/view?usp=drive_link","nodes":"3","services":"Discord, OpenWeatherMap","type":"Notification"},
+        {"id":"rec5XmG8kH2n8S5qT","name":"Save new Gmail attachments to Google Drive","description":"This workflow automatically saves new attachments from your Gmail account to a specified Google Drive folder.","jsonUrl":"https://drive.google.com/file/d/1iyeZv71q308XlZXzxIKyNvnAd_CKoO9I/view?usp=drive_link","nodes":"3","services":"Gmail, Google Drive","type":"File Management"},
+        {"id":"rec6tY2h8U5o2s1vK","name":"Create daily sales reports from Salesforce and send via Slack","description":"This workflow generates a daily sales report from Salesforce data and posts it to a Slack channel.","jsonUrl":"https://drive.google.com/file/d/1aB2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q/view?usp=drive_link","nodes":"8","services":"Salesforce, Slack","type":"Reporting"},
+        {"id":"rec8C5gH6oP3v5u2L","name":"Sync data between two Airtable bases","description":"This workflow syncs data between two different Airtable bases.","jsonUrl":"https://drive.google.com/file/d/1pQ2r3S4t5U6v7W8x9Y0z1A2b3C4d5E6f/view?usp=drive_link","nodes":"5","services":"Airtable","type":"Data Sync"},
+        {"id":"recA9kEaQ2k8b13Q2","name":"Post new WordPress posts to a Facebook Page","description":"This workflow automatically posts new articles from a WordPress site to a Facebook Page.","jsonUrl":"https://drive.google.com/file/d/1bC3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r/view?usp=drive_link","nodes":"2","services":"Facebook Pages, WordPress","type":"Social Media"},
+        {"id":"recB7jL5n2k7B23bO","name":"Send a weekly summary of new Typeform responses to a Slack channel","description":"This workflow sends a weekly summary of new Typeform responses to a specified Slack channel.","jsonUrl":"https://drive.google.com/file/d/1rS3t4U5v6W7x8Y9z0A1b2C3d4E5f6G7h/view?usp=drive_link","nodes":"6","services":"Slack, Typeform","type":"Reporting"},
+        {"id":"recD3v5u2L8C5gH6o","name":"Create a Trello card from a new message in a Slack channel","description":"This workflow creates a new Trello card from a new message in a specific Slack channel.","jsonUrl":"https://drive.google.com/file/d/1sT4u5V6w7X8y9Z0a1B2c3D4e5F6g7H8i/view?usp=drive_link","nodes":"3","services":"Slack, Trello","type":"Task Management"},
+        {"id":"recEaQ2k8b13Q2g9k","name":"When a new Calendly event is created, create a Zoom meeting and send an invite","description":"This workflow streamlines meeting scheduling.","jsonUrl":"https://drive.google.com/file/d/1uV6w7X8y9Z0a1B2c3D4e5F6g7H8i9J0k/view?usp=drive_link","nodes":"5","services":"Calendly, Google Calendar, Zoom","type":"Productivity"},
+        {"id":"recFq7jL5n2k7B23b","name":"Get RSS feed items and post them to a Telegram channel","description":"This workflow fetches the latest items from an RSS feed and posts them as messages to a Telegram channel.","jsonUrl":"https://drive.google.com/file/d/1wX7y8Z9a0B1c2D3e4F5g6H7i8J9k0L1m/view?usp=drive_link","nodes":"3","services":"RSS, Telegram","type":"Content Curation"},
+        {"id":"recGg1e9M5p9n2G4v","name":"Transcribe audio files from Google Drive using OpenAI (Whisper)","description":"This workflow automatically transcribes audio files uploaded to a specific Google Drive folder.","jsonUrl":"https://drive.google.com/file/d/1yZ8a9B0c1D2e3F4g5H6i7J8k9L0m1N2o/view?usp=drive_link","nodes":"6","services":"Google Drive, OpenAI","type":"AI & Machine Learning"},
+        {"id":"recH3v5u2L8C5gH6o","name":"Send a customized welcome email to new members on Circle","description":"This workflow sends a personalized welcome email to new members who join your Circle community.","jsonUrl":"https://drive.google.com/file/d/1zB9c0D1e2F3g4H5i6J7k8L9m0N1o2P3q/view?usp=drive_link","nodes":"3","services":"Circle, SMTP","type":"Email"},
+        {"id":"recI8C5gH6oP3v5u2","name":"Generate an image with OpenAI (DALL-E) and send it to Discord","description":"This workflow takes a text prompt, generates an image using OpenAI's DALL-E, and posts the resulting image to a Discord channel.","jsonUrl":"https://drive.google.com/file/d/10C2d3E4f5G6h7I8j9K0l1M2n3O4p5Q6r/view?usp=drive_link","nodes":"3","services":"Discord, OpenAI","type":"AI & Machine Learning"},
+        {"id":"recJ9kEaQ2k8b13Q2","name":"Create Notion pages from new Google Calendar events","description":"This workflow creates a new page in a Notion database for every new event created in Google Calendar.","jsonUrl":"https://drive.google.com/file/d/11D3e4F5g6H7i8J9k0L1m2N3o4P5q6R7s/view?usp=drive_link","nodes":"3","services":"Google Calendar, Notion","type":"Productivity"},
+        {"id":"recK7jL5n2k7B23bO","name":"Add new Shopify orders to a Google Sheet","description":"This workflow adds a new row to a Google Sheet for every new order created in Shopify.","jsonUrl":"https://drive.google.com/file/d/12E4f5G6h7I8j9K0l1M2n3O4p5Q6r7S8t/view?usp=drive_link","nodes":"3","services":"Google Sheets, Shopify","type":"Data Sync"},
+        {"id":"recLq7jL5n2k7B23b","name":"Summarize Hacker News front page using OpenAI and send to Slack","description":"This workflow fetches the top stories from Hacker News, uses OpenAI to summarize them, and posts the summary to a Slack channel daily.","jsonUrl":"https://drive.google.com/file/d/13F5g6H7i8J9k0L1m2N3o4P5q6R7s8T9u/view?usp=drive_link","nodes":"6","services":"HTTP Request, OpenAI, Slack","type":"Content Curation"},
+        {"id":"recMg1e9M5p9n2G4v","name":"When a GitHub issue is created, send a notification to a Mattermost channel","description":"This workflow sends a notification to a specific Mattermost channel whenever a new issue is created in a GitHub repository.","jsonUrl":"https://drive.google.com/file/d/14G6h7I8j9K0l1M2n3O4p5Q6r7S8t9U0v/view?usp=drive_link","nodes":"2","services":"GitHub, Mattermost","type":"DevOps"},
+        {"id":"recNvJg1e9M5p9n2G","name":"Create a new customer in HubSpot from a new row in Google Sheets","description":"This workflow creates a new customer in HubSpot whenever a new row is added to a specific Google Sheet.","jsonUrl":"https://drive.google.com/file/d/15H7i8J9k0L1m2N3o4P5q6R7s8T9u0V1w/view?usp=drive_link","nodes":"3","services":"Google Sheets, HubSpot","type":"CRM"},
+        {"id":"recOmG8kH2n8S5qT","name":"Post new YouTube videos from a channel to a Discord channel","description":"This workflow automatically posts a link to new videos from a specific YouTube channel to a Discord channel.","jsonUrl":"https://drive.google.com/file/d/16I8j9K0l1M2n3O4p5Q6r7S8t9U0v1W2x/view?usp=drive_link","nodes":"3","services":"Discord, YouTube","type":"Social Media"},
+        {"id":"recPtY2h8U5o2s1vK","name":"Translate new messages in a Telegram channel using Google Translate and post them back","description":"This workflow monitors a Telegram channel for new messages, translates them to a specified language using Google Translate, and posts the translation back to the channel.","jsonUrl":"https://drive.google.com/file/d/17J9k0L1m2N3o4P5q6R7s8T9u0V1w2X3y/view?usp=drive_link","nodes":"4","services":"Google Translate, Telegram","type":"Utility"},
+        {"id":"recQ2bOq7jL5n2k7B","name":"Get daily updates from a stock symbol using Finnhub and send to Slack","description":"This workflow gets daily stock updates for a given symbol from Finnhub and sends a summary to a Slack channel.","jsonUrl":"https://drive.google.com/file/d/18K0l1M2n3O4p5Q6r7S8t9U0v1W2x3Y4z/view?usp=drive_link","nodes":"4","services":"FinnHub, Slack","type":"Finance"},
+        {"id":"recRkEaQ2k8b13Q2g","name":"Sync new Google Contacts to a SendGrid mailing list","description":"This workflow keeps your SendGrid mailing list updated with your Google Contacts.","jsonUrl":"https://drive.google.com/file/d/19L1m2N3o4P5q6R7s8T9u0V1w2X3y4Z5a/view?usp=drive_link","nodes":"3","services":"Google Contacts, SendGrid","type":"Data Sync"},
+        {"id":"recSjL5n2k7B23bOq","name":"Create a new event in Google Calendar from a new row in an Airtable base","description":"This workflow creates a new Google Calendar event whenever a new record is added to a specific Airtable base.","jsonUrl":"https://drive.google.com/file/d/1aM2n3O4p5Q6r7S8t9U0v1W2x3Y4z5A6b/view?usp=drive_link","nodes":"3","services":"Airtable, Google Calendar","type":"Productivity"},
+        {"id":"recT3v5u2L8C5gH6o","name":"When a new file is added to a Dropbox folder, create a task in Asana","description":"This workflow creates a new task in Asana every time a new file is added to a specific Dropbox folder.","jsonUrl":"https://drive.google.com/file/d/1bN3o4P5q6R7s8T9u0V1w2X3y4Z5a6B7c/view?usp=drive_link","nodes":"3","services":"Asana, Dropbox","type":"Task Management"},
+        {"id":"recU8C5gH6oP3v5u2","name":"Send a weekly digest of your Pocket articles to your Kindle","description":"This workflow sends a weekly digest of unread articles from your Pocket account to your Kindle device.","jsonUrl":"https://drive.google.com/file/d/1cO4p5Q6r7S8t9U0v1W2x3Y4z5A6b7C8d/view?usp=drive_link","nodes":"7","services":"Pocket, SMTP, Calibre","type":"Productivity"},
+        {"id":"recV9kEaQ2k8b13Q2","name":"Get the latest currency exchange rates from ExchangeRatesAPI and store in a Google Sheet","description":"This workflow fetches the latest currency exchange rates daily and appends them to a Google Sheet for historical tracking.","jsonUrl":"https://drive.google.com/file/d/1dP5q6R7s8T9u0V1w2X3y4Z5a6B7c8D9e/view?usp=drive_link","nodes":"4","services":"ExchangeRatesAPI, Google Sheets","type":"Finance"},
+        {"id":"recW7jL5n2k7B23bO","name":"Post your new blog posts from Ghost to your LinkedIn profile","description":"This workflow automatically shares your new Ghost blog posts on your LinkedIn profile.","jsonUrl":"https://drive.google.com/file/d/1eQ6r7S8t9U0v1W2x3Y4z5A6b7C8d9E0f/view?usp=drive_link","nodes":"2","services":"Ghost, LinkedIn","type":"Social Media"},
+        {"id":"recXq7jL5n2k7B23b","name":"Create a new Google Doc from a template when a new row is added in Google Sheets","description":"This workflow creates a new Google Doc from a template, populating it with data from a new row in Google Sheets.","jsonUrl":"https://drive.google.com/file/d/1fR7s8T9u0V1w2X3y4Z5a6B7c8D9e0F1g/view?usp=drive_link","nodes":"4","services":"Google Docs, Google Sheets","type":"Document Automation"},
+        {"id":"recYg1e9M5p9n2G4v","name":"Scrape a website and send the data to an Airtable base","description":"This workflow scrapes data from a specified website on a schedule and adds the extracted information to an Airtable base.","jsonUrl":"https://drive.google.com/file/d/1gS8t9U0v1W2x3Y4z5A6b7C8d9E0f1G2h/view?usp=drive_link","nodes":"4","services":"Airtable, HTTP Request","type":"Data Scraping"},
+        {"id":"recZvJg1e9M5p9n2G","name":"Add new Eventbrite attendees to a MailerLite mailing list","description":"This workflow automatically adds new attendees from an Eventbrite event to a MailerLite mailing list.","jsonUrl":"https://drive.google.com/file/d/1hT9u0V1w2X3y4Z5a6B7c8D9e0F1g2H3i/view?usp=drive_link","nodes":"3","services":"Eventbrite, MailerLite","type":"Event Management"},
+        {"id":"reca3Q2g9kEaQ2k8b","name":"Create a new Zendesk ticket from a new entry in a Typeform","description":"This workflow creates a new ticket in Zendesk for every new submission in a Typeform.","jsonUrl":"https://drive.google.com/file/d/1iU0v1W2x3Y4z5A6b7C8d9E0f1G2h3I4j/view?usp=drive_link","nodes":"3","services":"Typeform, Zendesk","type":"Customer Support"},
+        {"id":"recb2bOq7jL5n2k7B","name":"Get a new random quote from an API and post it to Twitter","description":"This workflow fetches a random quote from a quote API and posts it to your Twitter account on a schedule.","jsonUrl":"https://drive.google.com/file/d/1jV1w2X3y4Z5a6B7c8D9e0F1g2H3i4J5k/view?usp=drive_link","nodes":"3","services":"HTTP Request, Twitter","type":"Social Media"},
+        {"id":"reccvJg1e9M5p9n2G","name":"Log new Stripe payments in a a Notion database","description":"This workflow logs all new successful payments from Stripe into a Notion database for easy tracking and analysis.","jsonUrl":"https://drive.google.com/file/d/1kW2x3Y4z5A6b7C8d9E0f1G2h3I4j5K6l/view?usp=drive_link","nodes":"3","services":"Notion, Stripe","type":"Finance"},
+        {"id":"recdXmG8kH2n8S5qT","name":"Send SMS notifications for new WooCommerce orders using Twilio","description":"This workflow sends an SMS notification via Twilio whenever a new order is placed on your WooCommerce store.","jsonUrl":"https://drive.google.com/file/d/1lX3y4Z5a6B7c8D9e0F1g2H3i4J5k6L7m/view?usp=drive_link","nodes":"3","services":"Twilio, WooCommerce","type":"E-commerce"},
+        {"id":"receY2h8U5o2s1vK","name":"When a new row is added to a Google Sheet, create a contact in ActiveCampaign","description":"This workflow creates a new contact in ActiveCampaign when a new row is added to a Google Sheet.","jsonUrl":"https://drive.google.com/file/d/1mY4z5A6b7C8d9E0f1G2h3I4j5K6l7M8n/view?usp=drive_link","nodes":"3","services":"ActiveCampaign, Google Sheets","type":"CRM"},
+        {"id":"recfC5gH6oP3v5u2L","name":"Get daily astronomy picture of the day from NASA API and post to Telegram","description":"This workflow gets the daily Astronomy Picture of the Day from the NASA API and posts it to a Telegram channel.","jsonUrl":"https://drive.google.com/file/d/1nZ5a6B7c8D9e0F1g2H3i4J5k6L7m8N9o/view?usp=drive_link","nodes":"3","services":"NASA, Telegram","type":"Fun"},
+        {"id":"recgA9kEaQ2k8b13Q","name":"Sync your Google Calendar with a Notion database","description":"This workflow creates a two-way sync between your Google Calendar and a Notion database.","jsonUrl":"https://drive.google.com/file/d/1oA6b7C8d9E0f1G2h3I4j5K6l7M8n9O0p/view?usp=drive_link","nodes":"12","services":"Google Calendar, Notion","type":"Productivity"},
+        {"id":"rech7jL5n2k7B23bO","name":"Archive new completed Pipedrive deals in a Google Sheet","description":"This workflow automatically archives details of new 'won' deals from Pipedrive into a Google Sheet for historical records.","jsonUrl":"https://drive.google.com/file/d/1pB7c8D9e0F1g2H3i4J5k6L7m8N9o0P1q/view?usp=drive_link","nodes":"3","services":"Google Sheets, Pipedrive","type":"Sales"},
+        {"id":"reci3v5u2L8C5gH6o","name":"Get an alert in Slack when a website is down","description":"This workflow periodically checks if a website is up. If it's down, it sends an alert to a specified Slack channel.","jsonUrl":"https://drive.google.com/file/d/1qC8d9E0f1G2h3I4j5K6l7M8n9O0p1Q2r/view?usp=drive_link","nodes":"5","services":"HTTP Request, Slack","type":"Monitoring"},
+        {"id":"recjEaQ2k8b13Q2g9","name":"When a new invoice is created in Zoho Invoice, add a row in Google Sheets","description":"This workflow adds a new row in Google Sheets for every new invoice created in Zoho Invoice.","jsonUrl":"https://drive.google.com/file/d/1rD9e0F1g2H3i4J5k6L7m8N9o0P1q2R3s/view?usp=drive_link","nodes":"3","services":"Google Sheets, Zoho Invoice","type":"Finance"},
+        {"id":"reckq7jL5n2k7B23b","name":"Create a new row in Airtable from a new GitHub commit","description":"This workflow adds a new record to an Airtable base for every new commit in a specified GitHub repository.","jsonUrl":"https://drive.google.com/file/d/1sE0f1G2h3I4j5K6l7M8n9O0p1Q2r3S4t/view?usp=drive_link","nodes":"3","services":"Airtable, GitHub","type":"DevOps"},
+        {"id":"reclg1e9M5p9n2G4v","name":"When a new item is published on a subreddit, post it on Discord","description":"This workflow shares new posts from a specified subreddit to a Discord chan
