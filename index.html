@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Template Catalog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Header and Search -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-white mb-2">n8n Workflow Template Catalog</h1>
+            <p class="text-lg text-gray-400">A curated list of automation templates with industry use-cases and suggested pricing.</p>
+        </header>
+
+        <!-- Search Input -->
+        <div class="mb-8 max-w-2xl mx-auto">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <input type="text" id="searchInput" class="block w-full bg-gray-800 border border-gray-700 rounded-md py-3 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search templates by name, description, or service...">
+            </div>
+        </div>
+
+        <!-- Templates Container -->
+        <main id="templates-container">
+            <!-- Templates will be dynamically inserted here -->
+        </main>
+        
+        <!-- No Results Message -->
+        <div id="no-results" class="text-center hidden py-16">
+            <h2 class="text-2xl font-semibold text-white">No Templates Found</h2>
+            <p class="text-gray-400 mt-2">Your search did not match any templates. Try a different keyword.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Manually extracted data from the provided "n8n Templates - Templates.csv" file.
+        const templates = [
+            {"id":"rec13Q2g9kEaQ2k8b","name":"Add new Google Forms responses to Airtable","description":"This workflow automatically adds new Google Forms responses to an Airtable base. When a new response is submitted through a Google Form, the workflow is triggered and adds the response data as a new record in a specified Airtable table.","url":"https://n8n.io/templates/add-new-google-forms-responses-to-airtable/","nodes":"2","services":"Airtable, Google Forms","type":"Data Sync","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"rec23bOq7jL5n2k7B","name":"Sync new Stripe customers to a Mailchimp list","description":"This workflow syncs new customers from Stripe to a Mailchimp list. It triggers when a new customer is created in Stripe, then adds or updates the subscriber in Mailchimp.","url":"https://n8n.io/templates/sync-new-stripe-customers-to-a-mailchimp-list/","nodes":"4","services":"Mailchimp, Stripe","type":"Data Sync","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"rec4vJg1e9M5p9n2G","name":"Get weather forecast from OpenWeatherMap and send it to a Discord channel","description":"This workflow gets the weather forecast for a specified location from OpenWeatherMap and sends it to a Discord channel.","url":"https://n8n.io/templates/get-weather-forecast-from-openweathermap-and-send-it-to-a-discord-channel/","nodes":"3","services":"Discord, OpenWeatherMap","type":"Notification","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"rec5XmG8kH2n8S5qT","name":"Save new Gmail attachments to Google Drive","description":"This workflow automatically saves new attachments from your Gmail account to a specified Google Drive folder. It triggers on a new email with an attachment.","url":"https://n8n.io/templates/save-new-gmail-attachments-to-google-drive/","nodes":"3","services":"Gmail, Google Drive","type":"File Management","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"rec6tY2h8U5o2s1vK","name":"Create daily sales reports from Salesforce and send via Slack","description":"This workflow generates a daily sales report from Salesforce data and posts it to a Slack channel. It runs on a schedule, fetches new opportunities, aggregates the data, and sends a summary.","url":"https://n8n.io/templates/create-daily-sales-reports-from-salesforce-and-send-via-slack/","nodes":"8","services":"Salesforce, Slack","type":"Reporting","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"rec8C5gH6oP3v5u2L","name":"Sync data between two Airtable bases","description":"This workflow syncs data between two different Airtable bases. When a record is updated in the source base, this workflow finds the corresponding record in the destination base and updates it.","url":"https://n8n.io/templates/sync-data-between-two-airtable-bases/","nodes":"5","services":"Airtable","type":"Data Sync","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recA9kEaQ2k8b13Q2","name":"Post new WordPress posts to a Facebook Page","description":"This workflow automatically posts new articles from a WordPress site to a Facebook Page. When a new post is published in WordPress, it triggers the workflow, which then creates a new post on the specified Facebook Page.","url":"https://n8n.io/templates/post-new-wordpress-posts-to-a-facebook-page/","nodes":"2","services":"Facebook Pages, WordPress","type":"Social Media","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recB7jL5n2k7B23bO","name":"Send a weekly summary of new Typeform responses to a Slack channel","description":"This workflow sends a weekly summary of new Typeform responses to a specified Slack channel. It runs on a schedule, fetches all new responses from the last week, formats them, and posts them to Slack.","url":"https://n8n.io/templates/send-a-weekly-summary-of-new-typeform-responses-to-a-slack-channel/","nodes":"6","services":"Slack, Typeform","type":"Reporting","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recD3v5u2L8C5gH6o","name":"Create a Trello card from a new message in a Slack channel","description":"This workflow creates a new Trello card from a new message posted in a specific Slack channel. It's useful for turning Slack conversations into actionable tasks.","url":"https://n8n.io/templates/create-a-trello-card-from-a-new-message-in-a-slack-channel/","nodes":"3","services":"Slack, Trello","type":"Task Management","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recEaQ2k8b13Q2g9k","name":"When a new Calendly event is created, create a Zoom meeting and send an invite","description":"This workflow streamlines meeting scheduling. When a new event is created in Calendly, it automatically creates a corresponding Zoom meeting and sends a calendar invite to the participants.","url":"https://n8n.io/templates/when-a-new-calendly-event-is-created-create-a-zoom-meeting-and-send-an-invite/","nodes":"5","services":"Calendly, Google Calendar, Zoom","type":"Productivity","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recFq7jL5n2k7B23b","name":"Get RSS feed items and post them to a Telegram channel","description":"This workflow fetches the latest items from an RSS feed and posts them as messages to a Telegram channel. It can be scheduled to run at regular intervals to keep the channel updated.","url":"https://n8n.io/templates/get-rss-feed-items-and-post-them-to-a-telegram-channel/","nodes":"3","services":"RSS, Telegram","type":"Content Curation","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"},
+            {"id":"recGg1e9M5p9n2G4v","name":"Transcribe audio files from Google Drive using OpenAI (Whisper)","description":"This workflow automatically transcribes audio files uploaded to a specific Google Drive folder. It uses OpenAI's Whisper model for transcription and saves the text back to Google Drive.","url":"https://n8n.io/templates/transcribe-audio-files-from-google-drive-using-openai-whisper/","nodes":"6","services":"Google Drive, OpenAI","type":"AI & Machine Learning","creator_id":"recqXnqlCq12xT0Gv","created_at":"2023-08-29T13:46:17.000Z"}
+        ];
+
+        // --- HELPER FUNCTIONS ---
+
+        /**
+         * Generates a suggested price based on the number of nodes.
+         * @param {string} nodes - The number of nodes in the workflow.
+         * @returns {object} An object with the price string and a style class.
+         */
+        function getSuggestedRate(nodes) {
+            const nodeCount = parseInt(nodes, 10);
+            if (nodeCount <= 3) {
+                return { price: "$25", class: "bg-green-600/20 text-green-300" };
+            } else if (nodeCount <= 7) {
+                return { price: "$50", class: "bg-yellow-600/20 text-yellow-300" };
+            } else {
+                return { price: "$75+", class: "bg-red-600/20 text-red-300" };
+            }
+        }
+
+        /**
+         * Generates a list of beneficial industries based on template name and services.
+         * This is a simple heuristic and can be expanded.
+         * @param {string} name - The template name.
+         * @param {string} services - Comma-separated list of services.
+         * @returns {string[]} A list of industry tags.
+         */
+        function getBeneficialIndustries(name, services) {
+            const industries = new Set();
+            const lowerCaseName = name.toLowerCase();
+            const lowerCaseServices = services.toLowerCase();
+
+            if (lowerCaseName.includes('sales') || lowerCaseServices.includes('salesforce')) industries.add('Sales');
+            if (lowerCaseName.includes('customer') || lowerCaseServices.includes('stripe') || lowerCaseServices.includes('mailchimp')) industries.add('E-commerce');
+            if (lowerCaseServices.includes('mailchimp') || lowerCaseServices.includes('facebook') || lowerCaseServices.includes('wordpress')) industries.add('Marketing');
+            if (lowerCaseServices.includes('google forms') || lowerCaseServices.includes('typeform')) industries.add('Education & Research');
+            if (lowerCaseServices.includes('airtable') || lowerCaseServices.includes('google drive')) industries.add('Operations');
+            if (lowerCaseServices.includes('slack') || lowerCaseServices.includes('discord') || lowerCaseServices.includes('telegram')) industries.add('Community Management');
+            if (lowerCaseServices.includes('trello') || lowerCaseServices.includes('calendly')) industries.add('Project Management');
+            if (lowerCaseServices.includes('wordpress') || lowerCaseServices.includes('rss')) industries.add('Publishing & Media');
+            if (lowerCaseServices.includes('openai')) industries.add('Tech & Startups');
+            
+            // Add a default if none found
+            if (industries.size === 0) industries.add('General Business');
+
+            return Array.from(industries);
+        }
+
+        // --- RENDER FUNCTION ---
+
+        const templatesContainer = document.getElementById('templates-container');
+        const noResultsDiv = document.getElementById('no-results');
+
+        /**
+         * Renders the templates on the page, grouped by type.
+         * @param {object[]} templatesToRender - The array of template objects to display.
+         */
+        function renderTemplates(templatesToRender) {
+            // Group templates by type
+            const groupedTemplates = templatesToRender.reduce((acc, template) => {
+                const type = template.type || 'Uncategorized';
+                if (!acc[type]) {
+                    acc[type] = [];
+                }
+                acc[type].push(template);
+                return acc;
+            }, {});
+
+            // Clear previous content
+            templatesContainer.innerHTML = '';
+            
+            if (Object.keys(groupedTemplates).length === 0) {
+                templatesContainer.classList.add('hidden');
+                noResultsDiv.classList.remove('hidden');
+            } else {
+                templatesContainer.classList.remove('hidden');
+                noResultsDiv.classList.add('hidden');
+            }
+
+            // Get sorted keys
+            const sortedTypes = Object.keys(groupedTemplates).sort();
+
+            // Generate HTML for each group
+            for (const type of sortedTypes) {
+                const groupHtml = `
+                    <div class="mb-12">
+                        <h2 class="text-2xl font-bold text-white border-b-2 border-gray-700 pb-2 mb-6">${type}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${groupedTemplates[type].map(template => createTemplateCard(template)).join('')}
+                        </div>
+                    </div>
+                `;
+                templatesContainer.innerHTML += groupHtml;
+            }
+        }
+
+        /**
+         * Creates the HTML for a single template card.
+         * @param {object} template - The template object.
+         * @returns {string} The HTML string for the card.
+         */
+        function createTemplateCard(template) {
+            const rateInfo = getSuggestedRate(template.nodes);
+            const industries = getBeneficialIndustries(template.name, template.services);
+            const servicesList = template.services.split(',').map(s => s.trim());
+
+            return `
+                <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col transform hover:scale-105 transition-transform duration-300">
+                    <div class="p-6 flex-grow">
+                        <!-- Header with Link -->
+                        <a href="${template.url}" target="_blank" rel="noopener noreferrer" class="block mb-3">
+                            <h3 class="text-xl font-bold text-white hover:text-blue-400 transition-colors">${template.name}</h3>
+                        </a>
+                        
+                        <!-- Description -->
+                        <p class="text-gray-400 text-sm mb-4 h-20 overflow-hidden">${template.description}</p>
+                        
+                        <!-- Services Used -->
+                        <div class="mb-4">
+                           <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Services</h4>
+                           <div class="flex flex-wrap gap-2">
+                                ${servicesList.map(service => `<span class="bg-gray-700 text-gray-300 text-xs font-medium px-2.5 py-1 rounded-full">${service}</span>`).join('')}
+                           </div>
+                        </div>
+
+                        <!-- Industries -->
+                        <div class="mb-4">
+                           <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Beneficial Industries</h4>
+                           <div class="flex flex-wrap gap-2">
+                                ${industries.map(industry => `<span class="bg-blue-900/50 text-blue-300 text-xs font-medium px-2.5 py-1 rounded-full">${industry}</span>`).join('')}
+                           </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer with Metadata -->
+                    <div class="bg-gray-900/50 px-6 py-3 flex justify-between items-center">
+                        <div>
+                            <span class="text-sm text-gray-400">Complexity: </span>
+                            <span class="text-sm font-semibold text-white">${template.nodes} nodes</span>
+                        </div>
+                        <div>
+                           <span class="text-sm font-semibold px-3 py-1 rounded-full ${rateInfo.class}">
+                                Charge Rate: ${rateInfo.price}
+                           </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- EVENT LISTENERS ---
+        
+        const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('keyup', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredTemplates = templates.filter(template => {
+                return (
+                    template.name.toLowerCase().includes(searchTerm) ||
+                    template.description.toLowerCase().includes(searchTerm) ||
+                    template.services.toLowerCase().includes(searchTerm)
+                );
+            });
+            renderTemplates(filteredTemplates);
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTemplates(templates);
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+  
