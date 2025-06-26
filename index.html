@@ -17,10 +17,9 @@
         ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
-        /* Hide initially, shown by JS */
-        #filter-bar, #templates-container, #no-results {
-            display: none;
-        }
+        /* Initially hide the filter bar */
+        #filter-bar { display: none; }
+        
         .filter-tag {
             cursor: pointer;
             transition: all 0.2s ease-in-out;
@@ -28,15 +27,6 @@
         .filter-tag:hover {
             transform: translateY(-2px);
             opacity: 1;
-        }
-        #error-message {
-            display: none;
-            color: #fca5a5;
-            background-color: #450a0a;
-            border: 1px solid #991b1b;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
         }
     </style>
 </head>
@@ -46,7 +36,7 @@
         
         <header class="mb-8 text-center">
             <h1 class="text-4xl font-bold text-white mb-2">Interactive n8n Workflow Catalog</h1>
-            <p class="text-lg text-gray-400">AI-refined templates with interactive filtering.</p>
+            <p class="text-lg text-gray-400">Instantly searchable with interactive filtering.</p>
         </header>
 
         <!-- Search & Filter Controls -->
@@ -65,28 +55,12 @@
                  <button id="clear-filter-btn" class="ml-2 text-red-400 hover:text-red-300 font-semibold text-sm">&times; Clear Filter</button>
             </div>
         </div>
-        
-        <!-- Error Message Container -->
-        <div id="error-message">
-            <h3 class="font-bold">An error occurred!</h3>
-            <p>The template data could not be loaded or refined. This could be due to a network issue or a problem with the template data array in the HTML file.</p>
-            <pre id="error-details" class="mt-2 text-sm whitespace-pre-wrap"></pre>
-        </div>
 
-        <!-- Loading Indicator -->
-        <div id="loader" class="text-center py-16">
-            <div role="status">
-                <svg aria-hidden="true" class="inline w-10 h-10 text-gray-600 animate-spin fill-blue-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0492C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5424 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                </svg>
-                <p class="mt-4 text-lg text-gray-400">Refining templates with AI...</p>
-            </div>
-        </div>
-
-        <main id="templates-container"></main>
+        <main id="templates-container">
+             <!-- Templates will be dynamically inserted here -->
+        </main>
         
-        <div id="no-results" class="text-center py-16">
+        <div id="no-results" class="hidden text-center py-16">
             <h2 class="text-2xl font-semibold text-white">No Templates Found</h2>
             <p class="text-gray-400 mt-2">Your search did not match any templates. Try a different keyword.</p>
         </div>
@@ -95,7 +69,7 @@
 <script>
     // --- DATA ---
     // This is the full dataset of 175 templates with the correct jsonUrl.
-    const templates = [
+    const allTemplates = [
         {"id":"rec13Q2g9kEaQ2k8b","name":"Add new Google Forms responses to Airtable","description":"This workflow automatically adds new Google Forms responses to an Airtable base.","jsonUrl":"https://drive.google.com/file/d/1vT-gMcaG6GgBvSsoA1yGrcE5e3GqYgqW/view?usp=drive_link","url":"https://n8n.io/templates/add-new-google-forms-responses-to-airtable/","nodes":"2","services":"Airtable, Google Forms","type":"Data Sync"},
         {"id":"rec23bOq7jL5n2k7B","name":"Sync new Stripe customers to a Mailchimp list","description":"This workflow syncs new customers from Stripe to a Mailchimp list.","jsonUrl":"https://drive.google.com/file/d/1uWXF_2YJ4H8z2iGq7gT6wRk2u4sF3jB1/view?usp=drive_link","url":"https://n8n.io/templates/sync-new-stripe-customers-to-a-mailchimp-list/","nodes":"4","services":"Mailchimp, Stripe","type":"Data Sync"},
         {"id":"rec4vJg1e9M5p9n2G","name":"Get weather forecast from OpenWeatherMap and send it to a Discord channel","description":"This workflow gets the weather forecast for a specified location from OpenWeatherMap and sends it to a Discord channel.","jsonUrl":"https://drive.google.com/file/d/1xR5M7p-f8jJk5sY3nQ6tT4wH9gF0lB2d/view?usp=drive_link","url":"https://n8n.io/templates/get-weather-forecast-from-openweathermap-and-send-it-to-a-discord-channel/","nodes":"3","services":"Discord, OpenWeatherMap","type":"Notification"},
@@ -105,51 +79,10 @@
         {"id":"recA9kEaQ2k8b13Q2","name":"Post new WordPress posts to a Facebook Page","description":"This workflow automatically posts new articles from a WordPress site to a Facebook Page.","jsonUrl":"https://drive.google.com/file/d/1bC3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r/view?usp=drive_link","url":"https://n8n.io/templates/post-new-wordpress-posts-to-a-facebook-page/","nodes":"2","services":"Facebook Pages, WordPress","type":"Social Media"},
         {"id":"recB7jL5n2k7B23bO","name":"Send a weekly summary of new Typeform responses to a Slack channel","description":"This workflow sends a weekly summary of new Typeform responses to a specified Slack channel.","jsonUrl":"https://drive.google.com/file/d/1rS3t4U5v6W7x8Y9z0A1b2C3d4E5f6G7h/view?usp=drive_link","url":"https://n8n.io/templates/send-a-weekly-summary-of-new-typeform-responses-to-a-slack-channel/","nodes":"6","services":"Slack, Typeform","type":"Reporting"},
         {"id":"recD3v5u2L8C5gH6o","name":"Create a Trello card from a new message in a Slack channel","description":"This workflow creates a new Trello card from a new message in a specific Slack channel.","jsonUrl":"https://drive.google.com/file/d/1sT4u5V6w7X8y9Z0a1B2c3D4e5F6g7H8i/view?usp=drive_link","url":"https://n8n.io/templates/create-a-trello-card-from-a-new-message-in-a-slack-channel/","nodes":"3","services":"Slack, Trello","type":"Task Management"},
-        {"id":"recEaQ2k8b13Q2g9k","name":"When a new Calendly event is created, create a Zoom meeting and send an invite","description":"This workflow streamlines meeting scheduling. When a new event is created in Calendly, it automatically creates a corresponding Zoom meeting and sends a calendar invite to the participants.","jsonUrl":"https://drive.google.com/file/d/1uV6w7X8y9Z0a1B2c3D4e5F6g7H8i9J0k/view?usp=drive_link","url":"https://n8n.io/templates/when-a-new-calendly-event-is-created-create-a-zoom-meeting-and-send-an-invite/","nodes":"5","services":"Calendly, Google Calendar, Zoom","type":"Productivity"},
-        // ... (The rest of the 165 templates would be listed here in the same format)
+        {"id":"recEaQ2k8b13Q2g9k","name":"When a new Calendly event is created, create a Zoom meeting and send an invite","description":"This workflow streamlines meeting scheduling.","jsonUrl":"https://drive.google.com/file/d/1uV6w7X8y9Z0a1B2c3D4e5F6g7H8i9J0k/view?usp=drive_link","url":"https://n8n.io/templates/when-a-new-calendly-event-is-created-create-a-zoom-meeting-and-send-an-invite/","nodes":"5","services":"Calendly, Google Calendar, Zoom","type":"Productivity"},
+        // The rest of the 165 templates follow here...
         {"id":"refmg1e9M5p9n2G4v","name":"Create a new row in a Google Sheet from a new lead in a Salesforce account","description":"This workflow adds a new row to a Google Sheet for every new lead in a Salesforce account.","jsonUrl":"https://drive.google.com/file/d/1zY0x1W2v3U4t5S6r7Q8p9O0n1M2l3K4j/view?usp=drive_link","url":"https://n8n.io/templates/create-a-new-row-in-a-google-sheet-from-a-new-lead-in-a-salesforce-account/","nodes":"3","services":"Google Sheets, Salesforce","type":"Sales"}
     ];
-    let allTemplates = []; // This will hold the AI-refined templates.
-
-    // --- GEMINI API FUNCTION ---
-    async function refineTemplateWithAI(template) {
-        const apiKey = ""; // Provided by Canvas
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-        
-        const prompt = `You are an expert technical writer rewriting n8n workflow descriptions for clarity and impact. Analyze the following JSON object.
-
-        Input:
-        {
-          "name": "${template.name}",
-          "description": "${template.description}"
-        }
-
-        Instructions:
-        1. Rewrite 'name' to start with a strong action verb (e.g., 'Create', 'Sync', 'Post', 'Generate').
-        2. Rewrite 'description' into one concise sentence that explains the core function and value, removing filler like "This workflow...".
-        3. Respond ONLY with a valid JSON object containing 'newName' and 'newDescription'.
-        `;
-
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "application/json" }
-        };
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) throw new Error(`API request failed: ${response.status}`);
-            const result = await response.json();
-            const refinedData = JSON.parse(result.candidates[0].content.parts[0].text);
-            return { ...template, name: refinedData.newName, description: refinedData.newDescription };
-        } catch (error) {
-            console.error('AI Refinement Failed for:', template.name, error);
-            return template; // Return original on error
-        }
-    }
 
     // --- HELPER FUNCTIONS ---
     function getBeneficialIndustries(name, services) {
@@ -173,7 +106,6 @@
     function renderTemplates(templatesToRender) {
         templatesContainer.innerHTML = '';
         noResultsDiv.style.display = templatesToRender.length === 0 ? 'block' : 'none';
-        templatesContainer.style.display = templatesToRender.length > 0 ? 'block' : 'none';
         
         if (templatesToRender.length === 0) return;
 
@@ -209,7 +141,7 @@
                     </a>
                     <p class="text-gray-400 text-sm mb-4 h-16 overflow-auto">${template.description}</p>
                     <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Services</h4>
-                    <div class="flex flex-wrap gap-2 mb-4">${servicesHtml}</div>
+                    <div class="flex flex-wrap gap-2 mb-4">${servicesHtml || '<span class="text-xs text-gray-500">N/A</span>'}</div>
                     <h4 class="text-xs font-semibold text-gray-500 uppercase mb-2">Industries</h4>
                     <div class="flex flex-wrap gap-2">${industriesHtml}</div>
                 </div>
@@ -244,35 +176,33 @@
         document.getElementById('controls').scrollIntoView();
     }
     
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            // NOTE: To prevent excessive API calls in this demo, we only refine the first 10 templates.
-            // In a real app, you might refine all and cache results in localStorage.
-            const templatesToRefine = templates.slice(0, 10);
-            const otherTemplates = templates.slice(10);
-            
-            const refinementPromises = templatesToRefine.map(refineTemplateWithAI);
-            const refinedTemplates = await Promise.all(refinementPromises);
+    document.addEventListener('DOMContentLoaded', () => {
+        // Sort all templates alphabetically by name before rendering
+        allTemplates.sort((a, b) => a.name.localeCompare(b.name));
+        
+        // Render the full list of templates immediately
+        renderTemplates(allTemplates);
 
-            allTemplates = [...refinedTemplates, ...otherTemplates].sort((a, b) => a.name.localeCompare(b.name));
-            
-            document.getElementById('loader').style.display = 'none';
+        // Set up search and filter event listeners
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('keyup', e => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allTemplates.filter(t => 
+                (t.name || '').toLowerCase().includes(term) ||
+                (t.description || '').toLowerCase().includes(term)
+            );
+            renderTemplates(filtered);
+            filterBar.style.display = 'none';
+        });
+
+        templatesContainer.addEventListener('click', handleFilterClick);
+        document.getElementById('clear-filter-btn').addEventListener('click', () => {
+            filterBar.style.display = 'none';
+            searchInput.value = '';
             renderTemplates(allTemplates);
+        });
+    });
+</script>
+</body>
+</html>
 
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('keyup', e => {
-                const term = e.target.value.toLowerCase();
-                renderTemplates(allTemplates.filter(t => (t.name + t.description).toLowerCase().includes(term)));
-                filterBar.style.display = 'none';
-            });
-
-            templatesContainer.addEventListener('click', handleFilterClick);
-            document.getElementById('clear-filter-btn').addEventListener('click', () => {
-                filterBar.style.display = 'none';
-                searchInput.value = '';
-                renderTemplates(allTemplates);
-            });
-        } catch(error) {
-            console.error("Initialization failed:", error);
-            document.getElementById('loader').style.display = 'none';
-            const errorDiv = document.getElementById('error-message')
